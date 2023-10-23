@@ -1,0 +1,202 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"); /*Letra*/
+:root {
+  --header-height: 3.5rem; /*Espaciado del menu nav con el top*/
+  --first-color: #dd99fa;
+  --text-color: #000000;
+  --body-font: "Space Grotesk", sans-serif;
+  --biggest-font-size: 2.5rem;
+  --normal-font-size: .938rem;
+  --smaller-font-size: .75rem;
+}
+@media screen and (min-width: 1150px) {
+  :root { /*Variable para cuando el el tamaño de la pantalla sea mas grande*/
+    --biggest-font-size: 4.5rem;
+    --normal-font-size: 1rem;
+    --smaller-font-size: .813rem;
+  }
+}
+
+body {
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.container {
+  max-width: 1500px;
+}
+
+.main {
+  overflow: hidden;
+}
+
+#header {
+  z-index: 100;
+  position: fixed; /*fixed para que el menu baje*/
+  width: 100%; /*ocupe el 100% del ancho*/
+  background-color: transparent;
+  transition: background-color 1s ease-out;
+}
+
+#header.scrolled {
+  background-color: #000000; /* Cambia el color de fondo cuando el usuario hace scroll */
+  color: #FFFFFF;
+}
+
+@media screen and (max-width: 500px) and (min-height: 500px) {
+  #header {
+    overflow-y: visible;
+  }
+}
+.nav { /*Seccion donde van los botones encerrados en el header*/
+  height: var(--header-height);
+  display: flex;
+  justify-content: space-evenly;
+  align-content: center;
+}
+.nav__logo {
+  font-weight: bold;
+}
+.nav__toggle { /*boton responsive*/
+  font-size: 2rem;
+  cursor: pointer;
+}
+@media screen and (max-width: 766px) {
+  .nav__menu {
+    position: fixed;
+    background-color: var(--first-color);
+    left: 0; /*Posicionamiento menu responsivo*/
+    top: -100%;
+    width: 100%;
+    padding: 2rem 0 2rem; /*Tamaño menu responsivo*/
+    border-radius: 0 0 1.5rem 1.5rem;
+    box-shadow: 0 10px 40px hsla(38, 4%, 15%, 0.15);
+    transition: 0.5s; /*Tiempo de duracion en abrir y cerrar*/
+    border: 1px solid black;
+  }
+}
+.nav__list {
+  text-align: center;
+  display: flex;
+  flex-direction: column; /*Un elemento debajo del otro*/
+  row-gap: 1.5rem; /*Espacio entre elementos*/
+}
+.nav__close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.show-menu {
+  top: 0;
+}
+
+.home {
+  background-color: var(--first-color);
+  height: 100vh; /*La seccion del nav se mostrara en el 100% del area de vizualizacion de la pantalla*/
+  display: flex;
+}
+.home__container {
+  display: grid;
+  align-content: center; /*Centramos contenido en medio*/
+  row-gap: 1rem; /*Separacion boton ofertas y logo que se mueve*/
+}
+.home__data { /*Texto dentro del container*/
+  text-align: center;
+}
+.home__title {
+  font-size: var(--biggest-font-size);
+  margin: 0.5rem 0;
+}
+.home__button {
+  margin-top: 2rem;
+  display: inline-block;
+  background-color: var(--text-color);
+  color: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 3rem;
+  transition: 0.4s;
+}
+.home__button:hover {
+  font-size: 1.15rem;
+}
+.home__img img {
+  width: 30vw;
+  animation: flotar 1.5s infinite alternate;
+}
+.home__img {
+  justify-self: center;
+}
+
+@keyframes flotar {
+  0% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(15px);
+  }
+}
+@media screen and (max-width: 320px) {
+  .nav__logo {
+    display: none;
+  }
+  .home__img {
+    display: none;
+  }
+  .home__button {
+    display: none;
+  }
+}
+@media screen and (max-width: 880px) {
+  .nav__logo {
+    display: none;
+  }
+}
+@media screen and (min-width: 767px) {
+  .nav {
+    height: calc(var(--header-height) + 1.5rem);
+  }
+  .nav__toggle, .nav__close { /*Ocultamos botones de responsive*/
+    display: none;
+  }
+  .nav__list {
+    flex-direction: row;
+    -moz-column-gap: 2.5rem;
+         column-gap: 2.5rem;
+  }
+}
+@media screen and (min-width: 1100px) {
+  .home__container {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    -moz-column-gap: 2rem;
+         column-gap: 2rem;
+  }
+  .home__data {
+    text-align: initial;
+  }
+  .home__img img {
+    width: 20vw;
+  }
+}
+@media screen and (max-width: 2200px) and (max-height: 610px) {
+  #header {
+    position: static;
+    background-color: #dd99fa;
+    z-index: 100;
+  }
+  #header.scrolled {
+    overflow-y: initial;
+  }
+  .nav {
+    z-index: 100;
+    position: sticky;
+  }
+  .home {
+    display: none;
+  }
+}/*# sourceMappingURL=styles.css.map */

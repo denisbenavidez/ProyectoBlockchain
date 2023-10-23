@@ -1,0 +1,45 @@
+.formRegistro{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 50px 110px;
+    background-color: #dd99fa ;
+    border-radius: 5%;
+    box-shadow: 0px 0px 12px 5px rgba(0,0,0,0.65);
+    -webkit-box-shadow: 0px 0px 12px 5px rgba(0,0,0,0.65);
+    -moz-box-shadow: 0px 0px 12px 5px rgba(0,0,0,0.65);
+}
+
+.divIcono{
+    padding: 10%;
+}
+
+.divInput{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.divBotones{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 10% 0%;
+}
+
+.divIniciarRegistro{
+    font-size: 1rem;
+    line-height: 2rem;
+}
+
+.a-iniciar-registro{
+    color: #0d6efd;
+}
+
+.a-iniciar-registro:hover{
+    color: #0b5ed7;
+}
+

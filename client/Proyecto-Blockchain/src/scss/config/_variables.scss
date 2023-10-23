@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap'); /*Letra*/
+:root{
+    --header-height: 3.5rem; /*Espaciado del menu nav con el top*/
+    --first-color: #dd99fa;
+    --text-color: #000000;
+    --body-font: 'Space Grotesk', sans-serif;
+    --biggest-font-size: 2.5rem;
+    --normal-font-size: .938rem;
+    --smaller-font-size: .75rem;
+    @media screen and (min-width: 1150px ){ /*Variable para cuando el el tamaño de la pantalla sea mas grande*/
+        --biggest-font-size: 4.5rem;
+        --normal-font-size: 1rem;
+        --smaller-font-size: .813rem;
+    }
+}

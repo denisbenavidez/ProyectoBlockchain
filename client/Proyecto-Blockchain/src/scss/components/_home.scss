@@ -1,0 +1,47 @@
+.home{
+    background-color: var(--first-color);
+    height: 100vh; /*La seccion del nav se mostrara en el 100% del area de vizualizacion de la pantalla*/
+    display: flex;
+
+    &__container{ //Seccion donde esta todo el contenido debajo del nav
+        display: grid;
+        align-content: center; /*Centramos contenido en medio*/
+        row-gap: 1rem; /*Separacion boton ofertas y logo que se mueve*/
+    }
+    &__data{ /*Texto dentro del container*/
+        text-align: center;
+    }
+    &__title{
+        font-size: var(--biggest-font-size);
+        margin: .50rem 0;
+    }
+    &__button{
+        margin-top: 2rem;
+        display: inline-block;
+        background-color: var(--text-color);
+        color: #fff;
+        padding: 1rem 1.5rem;
+        border-radius: 3rem;
+        transition: 0.4s;
+        &:hover{
+            font-size: 1.15rem;
+        }
+    }
+    &__img img{
+        width: 30vw;
+        animation: flotar 1.5s infinite alternate
+    }
+    &__img{
+        justify-self: center;
+    }
+}
+
+
+@keyframes flotar {
+    0%{
+        transform: translateY(-10px);
+    }
+    100%{
+        transform: translateY(15px);
+    }
+}

@@ -1,0 +1,51 @@
+body{
+	background: linear-gradient(217deg, #dd99fa, rgba(255,0,0,0) 70.71%),
+                linear-gradient(127deg, white, rgba(0,255,0,0) 70.71%),
+                linear-gradient(336deg, #9353d3, rgba(0,0,255,0) 70.71%);
+	background-size: 400% 400%;
+	position: relative;
+	animation: cambiar 5s ease-in-out infinite;
+    
+} 
+
+@keyframes cambiar{
+    0%{background-position: 0 50%;}
+    50%{background-position: 100% 50%;}
+    100%{background-position: 0 50%;}
+}
+
+#root{
+    height: 100vh;
+}
+
+
+.section-principal{ /*Margenes en la seccion principal*/
+margin: 0% 5%;
+}
+
+.contenido-ui{ /*Botones*/
+    display: flex;
+    justify-content:end;
+    margin: 1% 4%;
+}
+
+.divCardPadre{ /*Separacion de Card*/
+    display: flex;
+    justify-content: space-evenly;    
+    gap: 5rem;
+    flex-wrap: wrap;
+}
+
+    
+.verMas-comprar{ /*Botones carrito y ver mas*/
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 5% 0% 0% 0%;
+}
+
+.div-pagination{ /*Botones numero de pagina*/
+    display: flex;
+    justify-content: center;
+    margin: 2% 0%;
+}

@@ -1,0 +1,65 @@
+#header{
+    z-index: 100;
+    position: fixed; /*fixed para que el menu baje*/
+    width: 100%; /*ocupe el 100% del ancho*/
+    background-color: transparent;
+    transition: background-color 1s ease-out;
+}
+
+#header.scrolled{ //Scroll.js
+    background-color: #000000; /* Cambia el color de fondo cuando el usuario hace scroll */
+    color: #FFFFFF;
+}
+
+@media screen and (max-width: 500px) and (min-height:500px) {
+    #header {
+      overflow-y: visible;
+    }
+}
+
+.nav{ /*Seccion donde van los botones encerrados en el header*/
+    height: var(--header-height);
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
+    
+    &__logo{
+        font-weight: bold;
+    }
+    &__toggle{ /*boton responsive*/
+        font-size: 2rem;
+        cursor: pointer;
+    }
+    &__menu{
+        @media screen and (max-width: 766px){
+            position: fixed;
+            background-color: var(--first-color);
+            left: 0; /*Posicionamiento menu responsivo*/
+            top: -100%;
+            width: 100%;
+            padding: 2rem 0 2rem; /*Tamaño menu responsivo*/
+            border-radius: 0 0 1.5rem 1.5rem;
+            box-shadow: 0 10px 40px hsla(38, 4%, 15%, .15);
+            transition: 0.5s; /*Tiempo de duracion en abrir y cerrar*/
+            border: 1px solid black;
+        }
+    }
+    &__list{
+        text-align: center;
+        display: flex;
+        flex-direction: column; /*Un elemento debajo del otro*/
+        row-gap: 1.5rem; /*Espacio entre elementos*/
+    }
+    
+    &__close{
+        position: absolute;
+        top: 1.2rem;
+        right: 1.5rem;
+        font-size: 2rem;
+        cursor: pointer;
+    }
+}
+
+.show-menu{
+    top:0;
+}
