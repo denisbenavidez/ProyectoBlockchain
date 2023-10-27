@@ -7,7 +7,7 @@ export function ModalBtn(props) {
 
   return (
     <>
-      <Button onPress={onOpen} radius="full" className="bg-gradient-to-tr from-pink-500 to-purple-500 text-white shadow-lg">Ver mas<i className="bi bi-plus-square-dotted"></i></Button>
+      <Button onPress={onOpen} className="btn btn-info">Ver mas</Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={true}> {/*Propiedades isDimissible permite cerrar el modal si se da esc o con un click fuera de su area*/}
         <ModalContent>
           {(onClose) => (

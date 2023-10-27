@@ -6,8 +6,9 @@ import DashboardInicio from "./dashboards/DashboardMain";
 import { AuthProvider } from "./context/AuthContext";
 import ProductsPage from "./componentes/product/ProductsPage";
 import ProductFormPage from "./componentes/productform/ProductFormPage";
-import ProfilePage from "./componentes/profile/ProfilePage";
 import { ProductProvider } from "./context/ProductContext";
+
+import MyProduct from "./componentes/profile/MyProduct";
 
 import { useState, useEffect } from "react"
 // import Web3 from 'web3';
@@ -88,7 +89,8 @@ function App() {
               <Route path='/add-task' element={<ProductFormPage />} />
               <Route path='/add-token' element={<TokenFormPage />} />
               <Route path='/tasks/:id' element={<ProductFormPage />} />
-              <Route path='/profile' element={<ProfilePage />} />
+              <Route path='/profile' element={<MyProduct />} />
+
             {/* </Route> */}
           </Routes>
         </NextUIProvider>

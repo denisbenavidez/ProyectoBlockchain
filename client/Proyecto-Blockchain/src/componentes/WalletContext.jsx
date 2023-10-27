@@ -41,6 +41,11 @@ export function WalletProvider({ children }) {
   const MySwal = withReactContent(Swal);
 
 
+  const [activeTokens, setActiveTokens] = useState([]);
+  const [inactiveTokens, setInactiveTokens] = useState([]);
+
+
+
   //*************** Logica para conectar el smart contract con infura movilizada desde app js ***************
   useEffect(() => {
     // Crear una instancia de Web3 utilizando el proveedor de Infura
@@ -51,7 +56,7 @@ export function WalletProvider({ children }) {
     // Crear una instancia del contrato
     const contractInstance = new web3InfuraConnect.eth.Contract(
       SmartContractTokenizacion,
-      "0xA1E6eE8401610bA8808b1868AF498cC09e124d16"
+      "0x5B6fe5215FDfDCb3859334AE7117Fa5a9e5e2f4F"
     );
     // Establecer la instancia del contrato en el estado para que pueda ser utilizada en toda la aplicación
     setContractAccessInfura(contractInstance);
@@ -70,6 +75,8 @@ export function WalletProvider({ children }) {
           if (infotoken.categoria != " " && infotoken.isActive) { // Filtrando solo los tokens activos.
             const token = {
               tokenId: infotoken.tokenId,
+              name: infotoken.name,
+              description: infotoken.description,
               price: infotoken.price,
               imageUrl: infotoken.imageUrl
             };
@@ -114,7 +121,7 @@ export function WalletProvider({ children }) {
         // -------------------------------------------
         const contractInstance = new web3Instance.eth.Contract(
           SmartContractTokenizacion,
-          SmartContractTokenizacion && "0xA1E6eE8401610bA8808b1868AF498cC09e124d16"
+          SmartContractTokenizacion && "0x5B6fe5215FDfDCb3859334AE7117Fa5a9e5e2f4F"
         ); //crear una instancia
         setContract(contractInstance);
         // llamado de metodos
@@ -215,7 +222,7 @@ export function WalletProvider({ children }) {
           setIsWalletConnected(true);
           const contractInstance = new web3Instance.eth.Contract(
             SmartContractTokenizacion,
-            SmartContractTokenizacion && "0xA1E6eE8401610bA8808b1868AF498cC09e124d16"
+            SmartContractTokenizacion && "0x5B6fe5215FDfDCb3859334AE7117Fa5a9e5e2f4F"
           );
           setContract(contractInstance);
         });
@@ -224,6 +231,23 @@ export function WalletProvider({ children }) {
       }
     }
   }, []);
+
+  async function getActiveTokens() {
+    if (contract) {
+      const activeTokens = await contract.methods.getActiveTokensOfUser().call({ from: account });
+      return activeTokens;
+    }
+    return [];
+  }
+  
+  async function getInactiveTokens() {
+    if (contract) {
+      const inactiveTokens = await contract.methods.getInactiveTokensOfUser().call({ from: account });
+      return inactiveTokens;
+    }
+    return [];
+  }
+  
 
   useEffect(() => {
     async function Wallet() { //verificacion si tenemos una wallet disponible
@@ -238,7 +262,7 @@ export function WalletProvider({ children }) {
     // El componente <WalletContext.Provider> sirve como un contenedor que provee acceso
     // a ciertos valores y funciones a todos los componentes que se encuentren dentro de él.
     // El prop "value" define los datos y funciones que queremos compartir con los componentes descendientes.
-    <WalletContext.Provider value={{ isWalletConnected, connecting, account, balance, conectarWallet, desconectarWallet, web3, contract, verificacionWallet, listarInformacionTokens, contractAccessInfura, web3Infura}}>
+    <WalletContext.Provider value={{ isWalletConnected, connecting, account, balance, conectarWallet, desconectarWallet, web3, contract, verificacionWallet, listarInformacionTokens, contractAccessInfura, web3Infura, getActiveTokens, getInactiveTokens }}>
       {/* Aquí es donde se renderizarán todos los componentes hijos que estén envueltos por el WalletProvider.
         Estos componentes tendrán acceso a todos los valores y funciones definidos en el prop "value" anterior. */}
       {children}

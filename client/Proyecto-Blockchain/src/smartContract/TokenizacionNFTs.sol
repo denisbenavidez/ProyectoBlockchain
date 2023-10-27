@@ -11,36 +11,49 @@ contract ProductNFT is ERC721, Ownable {
     uint256 private _tokenIdCounter;
 
     // Mapeos para asociar productIds y tokenIds, precios con tokenIds y URLs de imágenes con tokenIds.
-    mapping(uint256 => uint256) public productIdToTokenId;
-    mapping(uint256 => uint256) public tokenIdToProductId;
+    
+    // Mappings para asociar el id de un producto de la base de datos con un token id
+    // mapping(uint256 => uint256) public productIdToTokenId;
+    // mapping(uint256 => uint256) public tokenIdToProductId;
     mapping(uint256 => uint256) public tokenIdToPrice;
     mapping(uint256 => string) public tokenIdToImageUrl; // Nuevo mapeo para URLs de imágenes.
 
+    // Mapeo para asociar un tokenId con su creador original.
+    mapping(uint256 => address) public originalCreators;
+
+    // Mapeo para almacenar en una lista los tokens que un usuario ha vendido
+    mapping(address => TokenizedProduct[]) public soldTokens;
+
     // Evento que se emitirá cuando un producto sea tokenizado.
     event ProductTokenized(
-        uint256 productId,
         uint256 tokenId,
+        string name,
+        string description,
         address owner,
         uint256 price
     );
+
     // Evento para cuando el precio de un NFT cambie.
     event PriceChanged(uint256 tokenId, uint256 newPrice);
+
     // Evento para cuando un NFT es comprado.
     event NFTPurchased(uint256 tokenId, address buyer, uint256 price);
 
     // Constructor para inicializar el contrato ERC721.
     constructor() ERC721("ProductNFT", "PNFT") {}
 
+    // Mapeo para almacenar la información de cada producto tokenizado.
+    mapping(uint256 => TokenizedProduct) public tokenizedProducts;
+
     // Estructura para almacenar la información del producto tokenizado.
     struct TokenizedProduct {
         uint256 tokenId;
+        string name; // Nuevo campo para el nombre del producto.
+        string description; // Nuevo campo para la descripción del producto.
         uint256 price;
         string imageUrl;
         bool isActive; // Estado del token (activo/inactivo).
     }
-
-    // Mapeo para asociar un tokenId con su respectiva información.
-    mapping(uint256 => TokenizedProduct) public tokenizedProducts;
 
     // -----------------Funciones sobrescritas------------------
 
@@ -114,16 +127,15 @@ contract ProductNFT is ERC721, Ownable {
     // Acuña el NFT y lo asigna al llamante de la función.
     // Emite el evento ProductTokenized.
     function tokenizeProduct(
-        uint256 productId,
+        string memory name, // Nuevo parámetro para el nombre del producto.
+        string memory description, // Nuevo parámetro para la descripción del producto.
         uint256 price,
         string memory imageUrl
     ) external returns (uint256) {
         // Incrementando el contador de tokenId de manera más directa.
         uint256 newTokenId = ++_tokenIdCounter;
 
-        // Asociando productId, tokenId, precio y URL de la imagen.
-        productIdToTokenId[productId] = newTokenId;
-        tokenIdToProductId[newTokenId] = productId;
+        // Asociando tokenId, precio y URL de la imagen.
         tokenIdToPrice[newTokenId] = price;
         tokenIdToImageUrl[newTokenId] = imageUrl;
 
@@ -133,13 +145,24 @@ contract ProductNFT is ERC721, Ownable {
         // Almacenando la información del producto tokenizado en el mapeo.
         tokenizedProducts[newTokenId] = TokenizedProduct(
             newTokenId,
+            name, // Almacenando el nombre.
+            description, // Almacenando la descripción.
             price,
             imageUrl,
             true // Estableciendo el estado inicial como activo.
         );
 
+        // Asociando el tokenId con su creador original.
+        originalCreators[newTokenId] = msg.sender;
+
         // Emitiendo evento de producto tokenizado.
-        emit ProductTokenized(productId, newTokenId, msg.sender, price);
+        emit ProductTokenized(
+            newTokenId,
+            name,
+            description,
+            msg.sender,
+            price
+        );
 
         // Retornando el nuevo tokenId.
         return newTokenId;
@@ -167,20 +190,48 @@ contract ProductNFT is ERC721, Ownable {
         _transfer(from, to, tokenId);
     }
 
-    // Función para obtener el productId asociado a un tokenId.
-    function getProductId(uint256 tokenId) external view returns (uint256) {
-        return tokenIdToProductId[tokenId];
-    }
-
-    // Función para obtener el tokenId asociado a un productId.
-    function getTokenId(uint256 productId) external view returns (uint256) {
-        return productIdToTokenId[productId];
-    }
-
     // Función para obtener el precio de un tokenId.
     function getPrice(uint256 tokenId) external view returns (uint256) {
         return tokenIdToPrice[tokenId];
     }
+
+    //-------------------------------
+    /**
+     * Esta función permite a un usuario obtener una lista de los tokens que ha comprado.
+     * Retorna una lista de productos tokenizados que el usuario ha comprado.
+     *
+     * Flujo:
+     * 1. Obtiene todos los tokens que posee el usuario.
+     * 2. Itera sobre esos tokens y verifica si el token está activo o inactivo según el parámetro 'isActive'.
+     * 3. También verifica si el token no fue creado por el usuario (es decir, fue comprado).
+     * 4. Si ambas condiciones se cumplen, agrega el token a la lista de tokens comprados.
+     */
+    function getBoughtTokensOfUser(bool isActive)
+        external
+        view
+        returns (TokenizedProduct[] memory)
+    {
+        address user = msg.sender;
+        uint256[] memory userTokens = tokensOfOwner(user);
+        uint256 tokenCount = userTokens.length;
+        TokenizedProduct[] memory boughtTokens = new TokenizedProduct[](
+            tokenCount
+        );
+        uint256 counter = 0;
+        for (uint256 i = 0; i < tokenCount; i++) {
+            uint256 tokenId = userTokens[i];
+            if (
+                tokenizedProducts[tokenId].isActive == isActive &&
+                originalCreators[tokenId] != user
+            ) {
+                boughtTokens[counter] = tokenizedProducts[tokenId];
+                counter++;
+            }
+        }
+        return boughtTokens;
+    }
+
+    //-------------------------------
 
     // Función para comprar un NFT.
     // Objetivo: Permite a un usuario comprar un NFT.
@@ -219,11 +270,30 @@ contract ProductNFT is ERC721, Ownable {
         // Transfiriendo el NFT al comprador.
         _transfer(currentOwner, msg.sender, tokenId);
 
+        // Agregando el token a la lista de tokens vendidos del dueño del token.
+        soldTokens[currentOwner].push(tokenizedProducts[tokenId]);
+
         // Emitiendo evento de compra de NFT.
         emit NFTPurchased(tokenId, msg.sender, price);
 
         // Después de transferir el NFT al comprador, marca el token como inactivo.
         tokenizedProducts[tokenId].isActive = false;
+    }
+
+    /**
+     *
+     * Esta función permite recuperar todos los tokens que el llamante de la función ha vendido.
+     * Cada token vendido se almacena como un objeto TokenizedProduct, que contiene detalles
+     * como el nombre, descripción, precio, URL de la imagen y el estado del token.
+     *
+     * @return Una lista de estructuras TokenizedProduct representando cada token vendido por el llamante.
+     */
+    function getSoldTokensOfUser()
+        external
+        view
+        returns (TokenizedProduct[] memory)
+    {
+        return soldTokens[msg.sender];
     }
 
     // Función para cambiar el precio de un NFT.

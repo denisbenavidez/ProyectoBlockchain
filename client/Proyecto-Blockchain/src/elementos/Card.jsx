@@ -62,15 +62,14 @@ export function Card() {
 
         return (
             <div className="card bg-dark" style={{ width: "18rem" }} key={item.tokenId}>
-                <img src={item.imageUrl} className="card-img-top" style={{ height: "18rem" }} />
+                <img src={item.imageUrl} className="card-img-top" style={{ height: "17rem" }} />
                 <div className="card-body card-body-border text-light p-4">
-                    <h3 className="card-title text-center">Producto</h3>
+                    <h3 className="card-title text-center">{item.name}</h3>
                     <div className='flex justify-around m-1'>
-                        <h5 className="card-title text-center"> Token Id: {item.tokenId} </h5>
+                        <h5 className="card-title text-center"> ID: {item.tokenId} </h5>
                         <h5 className="card-title text-center"> Precio: {priceInEther} ETH</h5> {/* Muestra el precio en Ether */}
                     </div>
-                    <p className="card-text text-justify">
-                        Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <p className="card-text text-justify">{item.description}</p>
                     <div className="verMas-comprar">
                         <Button
                             radius="full"

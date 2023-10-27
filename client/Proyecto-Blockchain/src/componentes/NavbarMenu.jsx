@@ -34,21 +34,16 @@ function NavbarMenu() {
     <>
       <header className="header" id="header">
         <nav className="nav container">
-          <a href="#" className="nav__logo">DIGITAL MARKETPLACE</a>
+          <a href="http://localhost:5173/" className="nav__logo">DIGITAL MARKETPLACE</a>
           <div className="nav__menu" id="nav-menu">
             <ul className="nav__list">
 
               {isAuthenticated ? (
 
                 <>
+
                   <li className="nav__item">
-                    Welcome {user.username}
-                  </li>
-                  <li className="nav__item">
-                    <button type="button" className="btn btn-outline-success nav__item"><a href="http://localhost:5173/add-task"><Link to="/add-task">Agregar Producto</Link></a></button>
-                  </li>
-                  <li className="nav__item">
-                    <button type="button" className="btn btn-outline-success nav__item" onClick={() => {
+                    <button type="button" className="btn btn-outline-danger nav__item" onClick={() => {
                       logout();
                     }}>Logout</button>
                   </li>
@@ -58,12 +53,24 @@ function NavbarMenu() {
               ) : (
 
                 <>
-                  <li className="nav__item">
-                    <button type="button" className="btn btn-outline-primary nav__item"><a href="http://localhost:5173/inicio"><Link to="registro">Entrar</Link></a></button>
+                  {/* <li className="nav__item">
+                    <button type="button" className="btn btn-outline-primary btn:hover text-white nav__item"><a href="http://localhost:5173/inicio">Entrar</a></button>
                   </li>
                   <li className="nav__item">
-                    <button type="button" className="btn btn-outline-success nav__item"><a href="http://localhost:5173/registro"><Link to="registro">Registrarse</Link></a></button>
+                    <button type="button" className="btn btn-outline-success btn:hover text-white nav__item"><a href="http://localhost:5173/registro">Registrarse</a></button>
+                  </li> */}
+
+                  <li className="nav__item">
+                    <button type="button" className="btn btn-outline-success nav__item"><a href="http://localhost:5173/add-token">Tokenizar Producto</a></button>
                   </li>
+                  {isWalletConnected && (
+                    <li className="nav__item">
+                      <button type="button" className="btn btn-outline-primary nav__item">
+                        <a href="http://localhost:5173/profile">Mi Cuenta</a>
+                      </button>
+                    </li>
+                  )}
+
                 </>
 
               )}
@@ -73,7 +80,8 @@ function NavbarMenu() {
                 <a className="nav__link"><Saldo /></a>
               </li>
 
-              <li className="nav__item"> {/*Input buscador*/}
+              {/*Input buscador*/}
+              {/* <li className="nav__item">
                 <a className="nav__link">
                   <Input classNames={{
                     base: "max-w-full sm:max-w-full h-10",
@@ -86,7 +94,7 @@ function NavbarMenu() {
                     startContent={<SearchIcon size={20} />}
                     type="search"
                   /></a>
-              </li>
+              </li> */}
               <li className="nav__item"> {/*Boton conexion wallet*/}
 
                 <a className="nav__link">{verificacionWallet ? (
